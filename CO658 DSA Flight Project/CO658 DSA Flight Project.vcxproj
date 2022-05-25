@@ -140,10 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CO658 DSA Flight Project.cpp" />
+    <ClCompile Include="DepartureSystem.cpp" />
     <ClCompile Include="HashTable.cpp" />
     <ClCompile Include="Stack.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DepartureSystem.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="Stack.h" />
   </ItemGroup>

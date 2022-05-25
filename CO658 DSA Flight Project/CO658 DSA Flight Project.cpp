@@ -5,9 +5,20 @@
 #include <string>
 #include "HashTable.h"
 #include "Stack.h"
-
+#include "DepartureSystem.h"
 using namespace std;
 
+//Student Name: Immanuel Godfrey
+//Student ID: 21817368
+//Course ID: CO650 - Advanced Programming
+
+void displayStudent()
+{
+    cout << "//Student Name: Immanuel Godfrey" << endl;
+    cout << "//Student ID: 21817368" << endl;
+    cout << "//Course ID: CO650 - Advanced Programming" << endl;
+    cout << endl;
+}
 enum DepartureControlState{
         SELECT, AVAILABILITY, CALCULATE, ALLOCATION
 };
@@ -165,162 +176,170 @@ void saveDestination(string country, Destinations countryEnum, Flights& selected
 
 int main()
 {
+
+    displayStudent();
+    DepartureSystem* myTerminal;
+    myTerminal = new DepartureSystem();
+
+    myTerminal->startDepartureSystem();
+
+
     //HashTableTest();
     //StackTest();
     //Initial Departure System state is SELECT  . Update upon state change
-    DepartureControlState currentState = SELECT;
+    //DepartureControlState currentState = SELECT;
 
-    //Poppulate Departure System with Flights
-    Flights departureSystem[3];
+    ////Poppulate Departure System with Flights
+    //Flights departureSystem[3];
 
-    //Load flights to MALTA
-    departureSystem[0].destination = MALTA;
-    departureSystem[0].availability = 10;
-    departureSystem[0].price = 100;
-    departureSystem[0].priceDelta = 3;
-    departureSystem[0].luggageStack = new Stack(10);
-    //Load flights to ATHENS
-    departureSystem[1].destination = ATHENS;
-    departureSystem[1].availability = 15;
-    departureSystem[1].price = 120;
-    departureSystem[1].priceDelta = 8;
-    departureSystem[1].luggageStack = new Stack(10);
-    //Load flights to MALTA
-    departureSystem[2].destination = ROME;
-    departureSystem[2].availability = 5;
-    departureSystem[2].price = 150;
-    departureSystem[2].priceDelta = 10;
-    departureSystem[2].luggageStack = new Stack(10);
+    ////Load flights to MALTA
+    //departureSystem[0].destination = MALTA;
+    //departureSystem[0].availability = 10;
+    //departureSystem[0].price = 100;
+    //departureSystem[0].priceDelta = 3;
+    //departureSystem[0].luggageStack = new Stack(10);
+    ////Load flights to ATHENS
+    //departureSystem[1].destination = ATHENS;
+    //departureSystem[1].availability = 15;
+    //departureSystem[1].price = 120;
+    //departureSystem[1].priceDelta = 8;
+    //departureSystem[1].luggageStack = new Stack(10);
+    ////Load flights to MALTA
+    //departureSystem[2].destination = ROME;
+    //departureSystem[2].availability = 5;
+    //departureSystem[2].price = 150;
+    //departureSystem[2].priceDelta = 10;
+    //departureSystem[2].luggageStack = new Stack(10);
 
-    Flights selectedFlight;
-    Tourist tourist;
-    HashTable passengerManifestHT;
-    tourist.name = "User";
-    tourist.credits = 10000; //10,000 credits in account
+    //Flights selectedFlight;
+    //Tourist tourist;
+    //HashTable passengerManifestHT;
+    //tourist.name = "User";
+    //tourist.credits = 10000; //10,000 credits in account
 
-    while (true)
-    {
-        switch (currentState)
-        {
-        case SELECT:
-            
-            printSystemStatus(tourist, departureSystem);
-            // User inputs the destination. if valid destination selected, move to next state; else go back to SELECT
-            int selectedDestination;
-            cin >> selectedDestination;
-            
-            switch (selectedDestination)
-            {
-            case MALTA:
-                saveDestination("MALTA", MALTA, selectedFlight, currentState);
-                break;
-            case ATHENS:
-                saveDestination("ATHENS", ATHENS, selectedFlight, currentState);
-                break;
-            case ROME:
-                saveDestination("ROME", ROME, selectedFlight, currentState);
-                break;
-            case 500:
-                //ticket search system uses a key to search the passenger Manifest
-                searchPassengerManifest(passengerManifestHT);
-                currentState = SELECT;
-                cout << "Invalid Destination Selected" << endl;
-                cout << endl << endl;
-                break;
-            default:
-                currentState = SELECT;
-                cout << "Invalid Destination Selected" << endl;
-                cout << endl << endl;
-                break;
-            }
-            break;
-        case AVAILABILITY:
-            //retrive the amount of seats the user wants to reserve
-            cout << "How many seats would you like to reserve? ";
-            int ticketQuantity;
-            cin >> ticketQuantity;
-            //Check if flight is overbooked
-            switch (selectedFlight.destination) {
-            case MALTA:
-                departureSystemAvailability(0, ticketQuantity, currentState, departureSystem);
-                break;
-            case ATHENS:
-                departureSystemAvailability(1, ticketQuantity, currentState, departureSystem);
-                break;
-            case ROME:
-                departureSystemAvailability(2, ticketQuantity, currentState, departureSystem);
-                break;
-            default:
-                cout << "Invalid Amount Recieved." << endl;
-                break;
-            }
-            break;
-        case CALCULATE:
-            //calcualte the final ticket price
-            cout << "The total cost for your ticket(s) is: ";
-            int cost;
-            switch (selectedFlight.destination)
-            {
-            case MALTA:
-                departureSystemCalculate(0, cost, ticketQuantity, departureSystem);
-                break;
-            case ATHENS:
-                departureSystemCalculate(1, cost, ticketQuantity, departureSystem);
-                break;
-            case ROME:
-                departureSystemCalculate(2, cost, ticketQuantity, departureSystem);
-                break;
-            default:
-                cout << "Error!" << endl;
-                break;
-            }
+    //while (true)
+    //{
+    //    switch (currentState)
+    //    {
+    //    case SELECT:
+    //        
+    //        printSystemStatus(tourist, departureSystem);
+    //        // User inputs the destination. if valid destination selected, move to next state; else go back to SELECT
+    //        int selectedDestination;
+    //        cin >> selectedDestination;
+    //        
+    //        switch (selectedDestination)
+    //        {
+    //        case MALTA:
+    //            saveDestination("MALTA", MALTA, selectedFlight, currentState);
+    //            break;
+    //        case ATHENS:
+    //            saveDestination("ATHENS", ATHENS, selectedFlight, currentState);
+    //            break;
+    //        case ROME:
+    //            saveDestination("ROME", ROME, selectedFlight, currentState);
+    //            break;
+    //        case 500:
+    //            //ticket search system uses a key to search the passenger Manifest
+    //            searchPassengerManifest(passengerManifestHT);
+    //            currentState = SELECT;
+    //            cout << "Invalid Destination Selected" << endl;
+    //            cout << endl << endl;
+    //            break;
+    //        default:
+    //            currentState = SELECT;
+    //            cout << "Invalid Destination Selected" << endl;
+    //            cout << endl << endl;
+    //            break;
+    //        }
+    //        break;
+    //    case AVAILABILITY:
+    //        //retrive the amount of seats the user wants to reserve
+    //        cout << "How many seats would you like to reserve? ";
+    //        int ticketQuantity;
+    //        cin >> ticketQuantity;
+    //        //Check if flight is overbooked
+    //        switch (selectedFlight.destination) {
+    //        case MALTA:
+    //            departureSystemAvailability(0, ticketQuantity, currentState, departureSystem);
+    //            break;
+    //        case ATHENS:
+    //            departureSystemAvailability(1, ticketQuantity, currentState, departureSystem);
+    //            break;
+    //        case ROME:
+    //            departureSystemAvailability(2, ticketQuantity, currentState, departureSystem);
+    //            break;
+    //        default:
+    //            cout << "Invalid Amount Recieved." << endl;
+    //            break;
+    //        }
+    //        break;
+    //    case CALCULATE:
+    //        //calcualte the final ticket price
+    //        cout << "The total cost for your ticket(s) is: ";
+    //        int cost;
+    //        switch (selectedFlight.destination)
+    //        {
+    //        case MALTA:
+    //            departureSystemCalculate(0, cost, ticketQuantity, departureSystem);
+    //            break;
+    //        case ATHENS:
+    //            departureSystemCalculate(1, cost, ticketQuantity, departureSystem);
+    //            break;
+    //        case ROME:
+    //            departureSystemCalculate(2, cost, ticketQuantity, departureSystem);
+    //            break;
+    //        default:
+    //            cout << "Error!" << endl;
+    //            break;
+    //        }
 
-            //collect payment from customer and adjust balance
-            collectPayment(cost, tourist, currentState);
-            break;
-        case ALLOCATION:
-            //Allocate the seats on flight, update the departure system (increase ticket price and update new availablitiy)
-            //stores baggage in luggage system
-            //issue the customers with their ticket ID's
+    //        //collect payment from customer and adjust balance
+    //        collectPayment(cost, tourist, currentState);
+    //        break;
+    //    case ALLOCATION:
+    //        //Allocate the seats on flight, update the departure system (increase ticket price and update new availablitiy)
+    //        //stores baggage in luggage system
+    //        //issue the customers with their ticket ID's
 
-            for (int i = 0; i < ticketQuantity; i++) {
-                cout << endl <<"Enter Name for Passenger " << i + 1 << ": ";
-                string name;
-                cin >> name;
-            
-                int ticketNumber = 0;
-                string ticketDetails;
-                switch (selectedFlight.destination)
-                {
-                case MALTA:
-                    departureSystemAllocation(100, 0, departureSystem, passengerManifestHT, ticketDetails, name);
-                    break;
-                case ATHENS:
-                    departureSystemAllocation(200, 1, departureSystem, passengerManifestHT, ticketDetails, name);
-                    break;
-                case ROME:
-                    departureSystemAllocation(300, 2, departureSystem, passengerManifestHT, ticketDetails, name);
-                    break;
-                default:
-                    cout << "Error!" << endl;
-                    currentState = SELECT;
-                    cout << endl << endl;
-                    break;
-                }
-            }
-            cout << endl;
-            cout << "[[[[  ...Automatically Checked in Baggage...  ]]]" << endl;
-            cout << "[[[[   Take Tickets and Proceed to Boarding   ]]]" << endl;
-            cout << "[[[[         Departure System Updated         ]]]" << endl;
-            currentState = SELECT;
-            cout << endl << endl;
-            break;
-        default:
-            cout << "Error Invalid State Detected " << endl;
-            currentState = SELECT;
-            break;
-        }
-    }
+    //        for (int i = 0; i < ticketQuantity; i++) {
+    //            cout << endl <<"Enter Name for Passenger " << i + 1 << ": ";
+    //            string name;
+    //            cin >> name;
+    //        
+    //            int ticketNumber = 0;
+    //            string ticketDetails;
+    //            switch (selectedFlight.destination)
+    //            {
+    //            case MALTA:
+    //                departureSystemAllocation(100, 0, departureSystem, passengerManifestHT, ticketDetails, name);
+    //                break;
+    //            case ATHENS:
+    //                departureSystemAllocation(200, 1, departureSystem, passengerManifestHT, ticketDetails, name);
+    //                break;
+    //            case ROME:
+    //                departureSystemAllocation(300, 2, departureSystem, passengerManifestHT, ticketDetails, name);
+    //                break;
+    //            default:
+    //                cout << "Error!" << endl;
+    //                currentState = SELECT;
+    //                cout << endl << endl;
+    //                break;
+    //            }
+    //        }
+    //        cout << endl;
+    //        cout << "[[[[  ...Automatically Checked in Baggage...  ]]]" << endl;
+    //        cout << "[[[[   Take Tickets and Proceed to Boarding   ]]]" << endl;
+    //        cout << "[[[[         Departure System Updated         ]]]" << endl;
+    //        currentState = SELECT;
+    //        cout << endl << endl;
+    //        break;
+    //    default:
+    //        cout << "Error Invalid State Detected " << endl;
+    //        currentState = SELECT;
+    //        break;
+    //    }
+    //}
     return 0;
 }
 
