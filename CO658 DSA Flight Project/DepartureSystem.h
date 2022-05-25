@@ -36,6 +36,6 @@ private:
     void searchPassengerManifest(HashTable passengerManifestHT);
 public:
     DepartureSystem();
-    void startDepartureSystem();
+    void runDepartureSystemFSM();
 };
 

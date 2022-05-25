@@ -42,6 +42,8 @@ void HashTableTest() {
         cout << "Oh oh. We need to check out code!" << endl;
     }
 
+    
+
     HT.insertItem(905, "Jim");
     HT.insertItem(201, "Tom");
     HT.insertItem(782, "Dick");
@@ -75,7 +77,7 @@ int main()
     DepartureSystem* myTerminal;
     myTerminal = new DepartureSystem();
 
-    myTerminal->startDepartureSystem();
+    myTerminal->runDepartureSystemFSM();
 
     return 0;
 }

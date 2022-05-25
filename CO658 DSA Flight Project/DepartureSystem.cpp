@@ -33,7 +33,7 @@ DepartureSystem::DepartureSystem()
     tourist.credits = 10000; //10,000 credits in account
 }
 
-void DepartureSystem::startDepartureSystem()
+void DepartureSystem::runDepartureSystemFSM()
 {
     while (true)
     {

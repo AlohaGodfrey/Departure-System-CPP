@@ -20,29 +20,29 @@
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <NestedTypes>
-      <Enum Name="DepartureSystem::DepartureControlState" Collapsed="true">
+      <Enum Name="DepartureSystem::DepartureControlState">
         <TypeIdentifier>
           <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
-      <Enum Name="DepartureSystem::Destinations" Collapsed="true">
+      <Enum Name="DepartureSystem::Destinations">
         <TypeIdentifier>
           <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
-      <Struct Name="DepartureSystem::Flights" Collapsed="true">
+      <Struct Name="DepartureSystem::Flights">
         <TypeIdentifier>
           <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
         </TypeIdentifier>
       </Struct>
-      <Struct Name="DepartureSystem::Tourist" Collapsed="true">
+      <Struct Name="DepartureSystem::Tourist">
         <TypeIdentifier>
           <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
         </TypeIdentifier>
       </Struct>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>ABCAgQAAAAAAAAAGIAAAAAAYAAAAAABAAAACQAAAAIE=</HashCode>
+      <HashCode>ABCAAQAAAAAAAAAHIAAAAAAYAAAAAABAAAACQAAAAIE=</HashCode>
       <FileName>DepartureSystem.h</FileName>
     </TypeIdentifier>
   </Class>
