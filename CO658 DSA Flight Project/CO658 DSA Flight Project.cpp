@@ -13,21 +13,22 @@ enum DepartureControlState{
 };
 
 enum Destinations {
-    MALTA = 100, ATHENS = 200, ROME = 300
+    MALTA = 100, ATHENS = 200, ROME = 300, FINDFLIGHT = 500
 };
 
 struct Flights {
     Destinations destination;
-    HashTable passengerManifestHT;
+    //HashTable passengerManifestHT;
     Stack* luggageStack;
     int availability;
     int price;
+    int priceDelta;
 };
 
 struct Tourist
 {
     string name;
-    int credits;
+    int credits = 0;
 };
 
 void StackTest() {
@@ -77,6 +78,30 @@ void HashTableTest() {
     cout << HT.searchTable(344) << endl;
 };
 
+void searchPassengerManifest(HashTable passengerManifestHT) {
+    int ticketSearch = 1;
+    while (ticketSearch)
+    {
+        cout << "Enter ticket ID (0 to Exit): ";
+        cin >> ticketSearch;
+        cout << passengerManifestHT.searchTable(ticketSearch) << endl;
+    }
+}
+
+void departureSystemAllocation(int flightMultiplier,int flightIndex, Flights departureSystem[], HashTable& passengerManifestHT, string ticketDetails, string name) {
+    int ticketNumber = 0;
+    ticketNumber = departureSystem[flightIndex].availability + flightMultiplier;
+    departureSystem[flightIndex].luggageStack->Push(ticketNumber);
+    
+    ticketDetails = "Destination: MALTA\nPassenger Name: " + name;
+    passengerManifestHT.insertItem(ticketNumber, ticketDetails);
+    cout << name << "'s Ticket ID and Baggage ID: " << ticketNumber << endl;
+    
+    //removes seat available and increases price after ticket is allocated
+    departureSystem[flightIndex].availability -= 1;
+    departureSystem[flightIndex].price += departureSystem[flightIndex].priceDelta;
+}
+
 int main()
 {
     //HashTableTest();
@@ -91,43 +116,49 @@ int main()
     departureSystem[0].destination = MALTA;
     departureSystem[0].availability = 10;
     departureSystem[0].price = 100;
+    departureSystem[0].priceDelta = 3;
     departureSystem[0].luggageStack = new Stack(10);
     //Load flights to ATHENS
     departureSystem[1].destination = ATHENS;
     departureSystem[1].availability = 15;
     departureSystem[1].price = 120;
+    departureSystem[1].priceDelta = 8;
+    departureSystem[1].luggageStack = new Stack(10);
     //Load flights to MALTA
     departureSystem[2].destination = ROME;
     departureSystem[2].availability = 5;
     departureSystem[2].price = 150;
+    departureSystem[2].priceDelta = 10;
+    departureSystem[2].luggageStack = new Stack(10);
 
     Flights selectedFlight;
-    Tourist customer;
-    customer.name = "John";
-    customer.credits = 100000; //100,000 credits in account
+    Tourist tourist;
+    HashTable passengerManifestHT;
+    tourist.name = "John";
+    tourist.credits = 10000; //10,000 credits in account
 
     while (true)
     {
         switch (currentState)
         {
         case SELECT:
-            //1. Display the current status for the Departure System and the customers Wallet
+            //1. Display the current status for the Departure System and the customers account balance
             cout << " <<<<<<---CURRENT STATUS--->>>>>>" << endl;
             cout << "[[[Departure System]]]" << endl;
             for (int i = 0; i < 3; i++) {
-                cout << departureSystem[i].destination << " has " << departureSystem[i].availability << " seats available, and each costs " << departureSystem[i].price << " credts." << endl;
+                cout << "Flight ID " << departureSystem[i].destination << " has " << departureSystem[i].availability << " seats available, and each costs " << departureSystem[i].price << " credts." << endl;
             }
-            cout << "[[[Tourist]]]" << endl;
-            cout << customer.name << " has " << customer.credits << " credits total." << endl;
+            cout << "[[[Logged In]]]" << endl;
+            cout << tourist.name << " has " << tourist.credits << " credits total." << endl;
             cout << "<<<<<<   END STATUS   >>>>>>" << endl << endl;
-            //2. Ask the user what is their desired destination
-            cout << "Please select a drink from the following avaialble options: " << endl;
-            //3. Display the Destinations and the corresponding ID values
-            cout << "MALTA = 100\nATHENS = 200\nROME = 300" << endl;
-            //4. User inputs the destination
+            cout << "Please select a destination (ID) from the following avaialble options: " << endl;
+            cout << "MALTA ID = 100\nATHENS ID = 200\nROME ID = 300\nFind Flight? = 500" << endl;
+            cout << "Menu Option: ";
+            
+            // User inputs the destination. if valid destination selected, move to next state; else go back to SELECT
             int selectedDestination;
             cin >> selectedDestination;
-            //5. if valid destination selected, move to next state; else go back to SELECT
+            
             switch (selectedDestination)
             {
             case MALTA:
@@ -136,7 +167,7 @@ int main()
                 currentState = AVAILABILITY;
                 break;
             case ATHENS:
-                cout << "You have selected ATHENS" << ATHENS;
+                cout << "You have selected ATHENS" << endl;
                 selectedFlight.destination = ATHENS;
                 currentState = AVAILABILITY;
                 break;
@@ -145,20 +176,28 @@ int main()
                 selectedFlight.destination = ROME;
                 currentState = AVAILABILITY;
                 break;
-            default:
-                cout << "Invalid Destination Selected" << endl;
+            case 500:
+                //ticket search system uses a key to search the passenger Manifest
+                searchPassengerManifest(passengerManifestHT);
                 currentState = SELECT;
+                cout << "Invalid Destination Selected" << endl;
+                cout << endl << endl;
+                break;
+            default:
+                currentState = SELECT;
+                cout << "Invalid Destination Selected" << endl;
+                cout << endl << endl;
                 break;
             }
             break;
         case AVAILABILITY:
             //retrive the amount of seats the user wants to reserve
-            //maybe add max???
             cout << "How many seats would you like to reserve? ";
             int ticketQuantity;
             cin >> ticketQuantity;
+            
 
-            cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
+            //Check if flight is overbooked
             switch (selectedFlight.destination) {
             case MALTA:
                 if (ticketQuantity < 0 || ticketQuantity > departureSystem[0].availability) {
@@ -168,6 +207,7 @@ int main()
                 }
                 else
                 {
+                    cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
                     currentState = CALCULATE;
                 }
                 break;
@@ -179,6 +219,7 @@ int main()
                 }
                 else
                 {
+                    cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
                     currentState = CALCULATE;
                 }
                 break;
@@ -190,6 +231,7 @@ int main()
                 }
                 else
                 {
+                    cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
                     currentState = CALCULATE;
                 }
                 break;
@@ -221,75 +263,46 @@ int main()
                 break;
             }
 
-            //collect payment from customer
+            //collect payment from customer and adjust balance
             int payment;
             cout << "Please type in your payment (credits): ";
             cin >> payment;
 
-            if (payment > customer.credits || payment < cost || payment <= 0) {
+            if (payment > tourist.credits || payment < cost || payment <= 0) {
                 cout << "You don't have enough credits" << endl;
                 currentState = SELECT;
                 cout << endl << endl;
             }
             else {
-                customer.credits -= payment;
+                tourist.credits -= payment;
                 int change = payment - cost;
                 cout << "Thank you! Your change is " << change << " credits." << endl;
-                customer.credits += change;
+                tourist.credits += change;
                 currentState = ALLOCATION;
             }
             break;
         case ALLOCATION:
-            //replace baggage o=for checkIn name
-            //lifo stack add baggage to the bottom. maybe give tickets and add baggage. to stack. yes or no
-            //ask if baggage, and for details for each users. then print tickets and baggage id.
-            //store baggage in stack
-            
-           
+            //Allocate the seats on flight, update the departure system (increase ticket price and update new availablitiy)
+            //stores baggage in luggage system
+            //issue the customers with their ticket ID's
+
             for (int i = 0; i < ticketQuantity; i++) {
-                //GET DETAILS NAME DEATILS FOR EACH TICKET
-                
-                //get name
-                cout << endl;
-                cout << "Enter Name for Passenger " << i + 1 << ": ";
+                cout << endl <<"Enter Name for Passenger " << i + 1 << ": ";
                 string name;
                 cin >> name;
             
-                //get ticket number
                 int ticketNumber = 0;
+                string ticketDetails;
                 switch (selectedFlight.destination)
                 {
                 case MALTA:
-                    
-                    ticketNumber = departureSystem[0].availability + i + 200;
-                    departureSystem[0].luggageStack->Push(ticketNumber);
-                    departureSystem[0].passengerManifestHT.insertItem(ticketNumber, name);
-
-                    cout << name << "'s Ticket ID and Baggage ID: " << ticketNumber << endl;
-
-                    //removes seat available and increases price after ticket is allocated
-                    departureSystem[2].availability -= 1;
-                    departureSystem[2].price += 3;
+                    departureSystemAllocation(100, 0, departureSystem, passengerManifestHT, ticketDetails, name);
                     break;
                 case ATHENS:
-                    ticketNumber = departureSystem[1].availability + i + 200;
-                    departureSystem[1].luggageStack->Push(ticketNumber);
-                    departureSystem[1].passengerManifestHT.insertItem(ticketNumber, name);
-                    cout << name << "'s Ticket ID and Baggage ID: " << ticketNumber << endl;
-
-                    //removes seat available and increases price after ticket is allocated
-                    departureSystem[2].availability -= 1;
-                    departureSystem[2].price += 3;
+                    departureSystemAllocation(200, 1, departureSystem, passengerManifestHT, ticketDetails, name);
                     break;
                 case ROME:
-
-                    ticketNumber = departureSystem[2].availability + i + 200;
-                    departureSystem[2].luggageStack->Push(ticketNumber);
-                    departureSystem[2].passengerManifestHT.insertItem(ticketNumber, name);
-                    //removes seat available and increases price after ticket is allocated
-                    departureSystem[2].availability -= 1;
-                    departureSystem[2].price += 3;
-                    cout << name << "'s Ticket ID and Baggage ID: " << ticketNumber << endl;
+                    departureSystemAllocation(300, 2, departureSystem, passengerManifestHT, ticketDetails, name);
                     break;
                 default:
                     cout << "Error!" << endl;
@@ -299,14 +312,9 @@ int main()
                 }
             }
             cout << endl;
-            cout << "[[[[...Automatically Checked in Baggage...]]]" << endl;
+            cout << "[[[[  ...Automatically Checked in Baggage...  ]]]" << endl;
             cout << "[[[[   Take Tickets and Proceed to Boarding   ]]]" << endl;
-
-            
-            
-            //modify each flights hT and luggage stack
-            //increase the departure price and decrease the available seats
-            cout << "Departure System Updated" << endl;
+            cout << "[[[[         Departure System Updated         ]]]" << endl;
             currentState = SELECT;
             cout << endl << endl;
             break;

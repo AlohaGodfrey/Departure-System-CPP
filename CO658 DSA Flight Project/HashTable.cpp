@@ -81,5 +81,5 @@ string HashTable::searchTable(int key) {
 	}
 
 	if (!keyExists)
-		return "Result Not Found";
+		return "Ticket Not Found";
 }
