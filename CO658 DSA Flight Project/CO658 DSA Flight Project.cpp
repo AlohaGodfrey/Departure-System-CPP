@@ -102,6 +102,67 @@ void departureSystemAllocation(int flightMultiplier,int flightIndex, Flights dep
     departureSystem[flightIndex].price += departureSystem[flightIndex].priceDelta;
 }
 
+void departureSystemAvailability(int flightIndex, int ticketQuantity, DepartureControlState& currentState, Flights departureSystem[]) {
+
+    if (ticketQuantity < 0 || ticketQuantity > departureSystem[flightIndex].availability) {
+        cout << "Flight Overbooked" << endl;
+        currentState = SELECT;
+        cout << endl << endl;
+    }
+    else
+    {
+        cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
+        currentState = CALCULATE;
+    }
+}
+
+void departureSystemCalculate(int flightIndex,int& cost, int ticketQuantity, Flights departureSystem[]) {
+    cost = departureSystem[0].price * ticketQuantity;
+    cout << cost << endl;
+}
+
+void collectPayment(int cost, Tourist tourist, DepartureControlState& currentState) {
+    //collect payment from customer and adjust balance
+    int payment;
+    cout << "Please type in your payment (credits): ";
+    cin >> payment;
+
+    if (payment > tourist.credits || payment < cost || payment <= 0) {
+        cout << "You don't have enough credits" << endl;
+        currentState = SELECT;
+        cout << endl << endl;
+    }
+    else {
+        tourist.credits -= payment;
+        int change = payment - cost;
+        cout << "Thank you! Your change is " << change << " credits." << endl;
+        tourist.credits += change;
+        currentState = ALLOCATION;
+    }
+
+}
+
+void printSystemStatus(Tourist tourist, Flights departureSystem[]) {
+    //1. Display the current status for the Departure System and the customers account balance
+    cout << " <<<<<<---CURRENT STATUS--->>>>>>" << endl;
+    cout << "[[[Departure System]]]" << endl;
+    for (int i = 0; i < 3; i++) {
+        cout << "Flight ID " << departureSystem[i].destination << " has " << departureSystem[i].availability << " seats available, and each costs " << departureSystem[i].price << " credts." << endl;
+    }
+    cout << "[[[Logged In]]]" << endl;
+    cout << tourist.name << " has " << tourist.credits << " credits total." << endl;
+    cout << "<<<<<<   END STATUS   >>>>>>" << endl << endl;
+    cout << "Please select a destination (ID) from the following avaialble options: " << endl;
+    cout << "MALTA ID = 100\nATHENS ID = 200\nROME ID = 300\nFind Flight? = 500" << endl;
+    cout << "Menu Option: ";
+}
+
+void saveDestination(string country, Destinations countryEnum, Flights& selectedFlight, DepartureControlState& currentState) {
+    cout << "You have selected "<< country << endl;
+    selectedFlight.destination = countryEnum;
+    currentState = AVAILABILITY;
+}
+
 int main()
 {
     //HashTableTest();
@@ -134,7 +195,7 @@ int main()
     Flights selectedFlight;
     Tourist tourist;
     HashTable passengerManifestHT;
-    tourist.name = "John";
+    tourist.name = "User";
     tourist.credits = 10000; //10,000 credits in account
 
     while (true)
@@ -142,19 +203,8 @@ int main()
         switch (currentState)
         {
         case SELECT:
-            //1. Display the current status for the Departure System and the customers account balance
-            cout << " <<<<<<---CURRENT STATUS--->>>>>>" << endl;
-            cout << "[[[Departure System]]]" << endl;
-            for (int i = 0; i < 3; i++) {
-                cout << "Flight ID " << departureSystem[i].destination << " has " << departureSystem[i].availability << " seats available, and each costs " << departureSystem[i].price << " credts." << endl;
-            }
-            cout << "[[[Logged In]]]" << endl;
-            cout << tourist.name << " has " << tourist.credits << " credits total." << endl;
-            cout << "<<<<<<   END STATUS   >>>>>>" << endl << endl;
-            cout << "Please select a destination (ID) from the following avaialble options: " << endl;
-            cout << "MALTA ID = 100\nATHENS ID = 200\nROME ID = 300\nFind Flight? = 500" << endl;
-            cout << "Menu Option: ";
             
+            printSystemStatus(tourist, departureSystem);
             // User inputs the destination. if valid destination selected, move to next state; else go back to SELECT
             int selectedDestination;
             cin >> selectedDestination;
@@ -162,19 +212,13 @@ int main()
             switch (selectedDestination)
             {
             case MALTA:
-                cout << "You have selected MALTA" << endl;
-                selectedFlight.destination = MALTA;
-                currentState = AVAILABILITY;
+                saveDestination("MALTA", MALTA, selectedFlight, currentState);
                 break;
             case ATHENS:
-                cout << "You have selected ATHENS" << endl;
-                selectedFlight.destination = ATHENS;
-                currentState = AVAILABILITY;
+                saveDestination("ATHENS", ATHENS, selectedFlight, currentState);
                 break;
             case ROME:
-                cout << "You have selected ROME" << endl;
-                selectedFlight.destination = ROME;
-                currentState = AVAILABILITY;
+                saveDestination("ROME", ROME, selectedFlight, currentState);
                 break;
             case 500:
                 //ticket search system uses a key to search the passenger Manifest
@@ -195,45 +239,16 @@ int main()
             cout << "How many seats would you like to reserve? ";
             int ticketQuantity;
             cin >> ticketQuantity;
-            
-
             //Check if flight is overbooked
             switch (selectedFlight.destination) {
             case MALTA:
-                if (ticketQuantity < 0 || ticketQuantity > departureSystem[0].availability) {
-                    cout << "Flight Overbooked" << endl;
-                    currentState = SELECT;
-                    cout << endl << endl;
-                }
-                else
-                {
-                    cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
-                    currentState = CALCULATE;
-                }
+                departureSystemAvailability(0, ticketQuantity, currentState, departureSystem);
                 break;
             case ATHENS:
-                if (ticketQuantity < 0 || ticketQuantity > departureSystem[1].availability) {
-                    cout << "Flight Overbooked" << endl;
-                    currentState = SELECT;
-                    cout << endl << endl;
-                }
-                else
-                {
-                    cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
-                    currentState = CALCULATE;
-                }
+                departureSystemAvailability(1, ticketQuantity, currentState, departureSystem);
                 break;
             case ROME:
-                if (ticketQuantity < 0 || ticketQuantity > departureSystem[2].availability) {
-                    cout << "Flight Overbooked" << endl;
-                    currentState = SELECT;
-                    cout << endl << endl;
-                }
-                else
-                {
-                    cout << "Your order has been recieved. You reserved " << ticketQuantity << " seat(s)." << endl;
-                    currentState = CALCULATE;
-                }
+                departureSystemAvailability(2, ticketQuantity, currentState, departureSystem);
                 break;
             default:
                 cout << "Invalid Amount Recieved." << endl;
@@ -247,16 +262,13 @@ int main()
             switch (selectedFlight.destination)
             {
             case MALTA:
-                cost = departureSystem[0].price * ticketQuantity;
-                cout << cost << endl;
+                departureSystemCalculate(0, cost, ticketQuantity, departureSystem);
                 break;
             case ATHENS:
-                cost = departureSystem[1].price * ticketQuantity;
-                cout << cost << endl;
+                departureSystemCalculate(1, cost, ticketQuantity, departureSystem);
                 break;
             case ROME:
-                cost = departureSystem[2].price * ticketQuantity;
-                cout << cost << endl;
+                departureSystemCalculate(2, cost, ticketQuantity, departureSystem);
                 break;
             default:
                 cout << "Error!" << endl;
@@ -264,22 +276,7 @@ int main()
             }
 
             //collect payment from customer and adjust balance
-            int payment;
-            cout << "Please type in your payment (credits): ";
-            cin >> payment;
-
-            if (payment > tourist.credits || payment < cost || payment <= 0) {
-                cout << "You don't have enough credits" << endl;
-                currentState = SELECT;
-                cout << endl << endl;
-            }
-            else {
-                tourist.credits -= payment;
-                int change = payment - cost;
-                cout << "Thank you! Your change is " << change << " credits." << endl;
-                tourist.credits += change;
-                currentState = ALLOCATION;
-            }
+            collectPayment(cost, tourist, currentState);
             break;
         case ALLOCATION:
             //Allocate the seats on flight, update the departure system (increase ticket price and update new availablitiy)
