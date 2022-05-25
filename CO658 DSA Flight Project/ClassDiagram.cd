@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="HashTable">
+    <Position X="7.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAABEAAAAAABAAAEAAAAAAAAAgBAAQAA=</HashCode>
+      <FileName>HashTable.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Stack">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAEAAAAAAAAAAgAgASCAAAIAAAAAAAACAA=</HashCode>
+      <FileName>Stack.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DepartureSystem">
+    <Position X="3.75" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="DepartureSystem::DepartureControlState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="DepartureSystem::Destinations" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Struct Name="DepartureSystem::Flights" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="DepartureSystem::Tourist" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DepartureSystem.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ABCAgQAAAAAAAAAGIAAAAAAYAAAAAABAAAACQAAAAIE=</HashCode>
+      <FileName>DepartureSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
